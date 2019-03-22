@@ -7,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.unisul.web.sexta.domain.Categoria;
+import br.unisul.web.sexta.domain.Estado;
 import br.unisul.web.sexta.repositories.CategoriaRepository;
+import br.unisul.web.sexta.repositories.EstadoRepository;
 
 @Service
 public class DbService {
 	
 	@Autowired
-	private CategoriaRepository rep;
+	private CategoriaRepository catRep;
+	
+	@Autowired
+	private EstadoRepository estRep;
 	
 	public void inicializaBancoDeDados() throws ParseException {
 		
@@ -24,8 +29,12 @@ public class DbService {
 		Categoria cat5 = new Categoria(null, "Jardinagem");
 		Categoria cat6 = new Categoria(null, "Decoração");
 		Categoria cat7 = new Categoria(null, "Perfumaria");
+		catRep.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		
-		rep.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
+		Estado e1 = new Estado(null, "Paraná");
+		Estado e2 = new Estado(null, "Santa Catarina");
+		Estado e3 = new Estado(null, "Rio Grande do Sul");
+		estRep.saveAll(Arrays.asList(e1,e2,e3));
 	}
 
 }

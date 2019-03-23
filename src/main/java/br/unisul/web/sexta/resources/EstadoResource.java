@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.unisul.web.sexta.domain.Cidade;
 import br.unisul.web.sexta.domain.Estado;
+import br.unisul.web.sexta.dtos.CidadeDTO;
 import br.unisul.web.sexta.dtos.EstadoDTO;
+import br.unisul.web.sexta.services.CidadeService;
 import br.unisul.web.sexta.services.EstadoService;
 
 
@@ -24,6 +27,9 @@ public class EstadoResource {
 	
 	@Autowired
 	private EstadoService service;
+	
+	@Autowired
+	private CidadeService cidadeService;
 	
 	//BUSCAR POR ID
 		@RequestMapping(value="/{id}",method=RequestMethod.GET)
@@ -55,6 +61,14 @@ public class EstadoResource {
 		public ResponseEntity<Void> delete(@PathVariable Integer id) {
 			service.delete(id);
 			return ResponseEntity.noContent().build();
+		}
+		
+		//LISTAR CIDADES DE UM ESTADO
+		@RequestMapping(value="/{estadoId}/cidades", method=RequestMethod.GET)
+		public ResponseEntity<List<CidadeDTO>> findCidades(@PathVariable Integer estadoId) {
+			List<Cidade> list = cidadeService.findByEstado(estadoId);
+			List<CidadeDTO> listDto = list.stream().map(obj -> new CidadeDTO(obj)).collect(Collectors.toList());  
+			return ResponseEntity.ok().body(listDto);
 		}
 		
 		//LISTAR TODAS

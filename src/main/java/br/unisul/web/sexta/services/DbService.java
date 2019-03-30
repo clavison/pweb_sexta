@@ -8,10 +8,15 @@ import org.springframework.stereotype.Service;
 
 import br.unisul.web.sexta.domain.Categoria;
 import br.unisul.web.sexta.domain.Cidade;
+import br.unisul.web.sexta.domain.Cliente;
+import br.unisul.web.sexta.domain.Endereco;
 import br.unisul.web.sexta.domain.Estado;
 import br.unisul.web.sexta.domain.Produto;
+import br.unisul.web.sexta.domain.enums.TipoCliente;
 import br.unisul.web.sexta.repositories.CategoriaRepository;
 import br.unisul.web.sexta.repositories.CidadeRepository;
+import br.unisul.web.sexta.repositories.ClienteRepository;
+import br.unisul.web.sexta.repositories.EnderecoRepository;
 import br.unisul.web.sexta.repositories.EstadoRepository;
 import br.unisul.web.sexta.repositories.ProdutoRepository;
 
@@ -29,6 +34,12 @@ public class DbService {
 	
 	@Autowired
 	private CidadeRepository cidRep;
+	
+	@Autowired
+	private ClienteRepository clieRep;
+	
+	@Autowired
+	private EnderecoRepository endRep;
 	
 	public void inicializaBancoDeDados() throws ParseException {
 		
@@ -55,8 +66,18 @@ public class DbService {
 		e2.getCidades().addAll(Arrays.asList(c2, c3, c4));
 		e3.getCidades().addAll(Arrays.asList(c5, c6));
 		
+		Cliente cli1 = new Cliente(null, "Clávison Zapelini", "clavison@gmail.com", "80234690968", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("48999939244", "48988120785"));
+		
+		Endereco en1 = new Endereco(null, "Almir Santos Miranda ", "929", "Apto 402", "Dehon"     , "88704110", cli1, c2);
+		Endereco en2 = new Endereco(null, "Hermínio João Santana", "112", "Casa"    , "Pouso Alto", "88735000", cli1, c3);
+		cli1.getEnderecos().addAll(Arrays.asList(en1, en2));
+		
 		estRep.saveAll(Arrays.asList(e1,e2,e3));
 		cidRep.saveAll(Arrays.asList(c1, c2, c3, c4, c5, c6));
+		
+		clieRep.saveAll(Arrays.asList(cli1));
+		endRep.saveAll(Arrays.asList(en1, en2));
 		
 		Produto p1 = new Produto(null, "Computador", 2000.00);
 		Produto p2 = new Produto(null, "Impressora", 800.00);
